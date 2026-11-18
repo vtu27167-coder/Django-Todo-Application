@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Todo Application</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+          rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            margin-top: 55px;
+        }
+
+        .task-card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 18px;
+            margin-bottom: 12px;
+        }
+
+        .task-name {
+            font-size: 17px;
+            word-break: break-word;
+        }
+
+        .completed-task {
+            color: #555;
+        }
+
+        .add-task-form {
+            margin-top: 35px;
+        }
+
+        .section-title {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Heading -->
+    <h2>Todo Application</h2>
+
+    <!-- Date -->
+    <h3>Date</h3>
+    <p>{% now "jS F Y" %}</p>
+
+    <hr>
+
+    <div class="row">
+
+        <!-- Pending Tasks -->
+        <div class="col-md-7">
+
+            <h4 class="section-title">
+                <i class="bi bi-list-task"></i>
+                Pending Tasks
+            </h4>
+
+            {% for task in tasks %}
+
+            <div class="task-card d-flex justify-content-between align-items-center">
+
+                <!-- Pending Task Name -->
+                <span class="task-name">
+                    {{ task.task }}
+                </span>
+
+                <!-- Buttons -->
+                <div class="d-flex gap-2">
+
+                    <a href="{% url 'complete' task.id %}"
+                       class="btn btn-success btn-sm">
+                        <i class="bi bi-check-circle"></i>
+                        Done
+                    </a>
+
+                    <a href="{% url 'deleteTask' task.id %}"
+                       class="btn btn-danger btn-sm">
+                        <i class="bi bi-trash"></i>
+                    </a>
+
+                    <a href="{% url 'updateData' task.id %}"
+                       class="btn btn-primary btn-sm">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+            {% empty %}
+
+            <p class="text-muted">
+                No pending tasks available.
+            </p>
+
+            {% endfor %}
+
+
+            <!-- Add Task Form -->
+            <form action="{% url 'addTask' %}"
+                  method="POST"
+                  class="add-task-form">
+
+                {% csrf_token %}
+
+                <div class="input-group">
+
+                    <input type="text"
+                           name="task"
+                           class="form-control"
+                           placeholder="Add a Task"
+                           maxlength="200"
+                           required>
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="bi bi-plus-square"></i>
+                        Add Task
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <!-- Completed Tasks -->
+        <div class="col-md-5">
+
+            <h4 class="section-title">
+                <i class="bi bi-check-circle-fill"></i>
+                Completed Tasks
+            </h4>
+
+            {% for task in completed_tasks %}
+
+            <div class="task-card d-flex justify-content-between align-items-center">
+
+                <!-- Completed Task Name -->
+                <span class="task-name completed-task">
+                    {{ task.task }}
+                </span>
+
+                <!-- Buttons -->
+                <div class="d-flex gap-2">
+
+                    <a href="{% url 'incomplete' task.id %}"
+                       class="btn btn-warning btn-sm">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                        Undone
+                    </a>
+
+                    <a href="{% url 'deleteTask' task.id %}"
+                       class="btn btn-danger btn-sm">
+                        <i class="bi bi-trash"></i>
+                    </a>
+
+                    <a href="{% url 'updateData' task.id %}"
+                       class="btn btn-primary btn-sm">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+            {% empty %}
+
+            <p class="text-muted">
+                No completed tasks available.
+            </p>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
